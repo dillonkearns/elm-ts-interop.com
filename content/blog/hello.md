@@ -9,11 +9,57 @@
 }
 ---
 
-Welcome to my blog! It was built with `elm-pages`!
+```typescript
+let app = Elm.Main.init({
+  flags: {
+    first: "Dillon",
+    last: "",
+    severity: "error",
+  },
+});
 
+app.ports.fromElm.subscribe((fromElm) => {
+  switch (fromElm.tag) {
+    case "alert":
+      app.ports.toElm.send([null, 1, 3, "", null]);
+      break;
+    case "bugsnag":
+      fromElm.context;
+      break;
+    case "sendPresenceHeartbeat":
+      break;
+    default:
+      assertUnreachable(fromElm);
+  }
+});
 
-```elm
-plus : number -> number -> number
-plus m n =
-    m + n
+function assertUnreachable(arg: never): never {
+  throw "Unreachable.";
+}
+
+// generated code below
+type FromElm =
+  | { tag: "alert"; message: string }
+  | { tag: "bugsnag"; context: string[]; message: string }
+  | { tag: "sendPresenceHeartbeat" };
+
+type Flags = {
+  severity: "info" | "warning" | "error";
+  first: string;
+  last: string;
+};
+
+type ToElm = [unknown, number, ...unknown[]] &
+  [unknown, unknown, unknown, string, ...unknown[]];
+
+interface ElmApp {
+  ports: {
+    fromElm: { subscribe(callback: (fromElm: FromElm) => void): void };
+    toElm: { send(data: ToElm): void };
+  };
+}
+
+declare const Elm: {
+  Main: { init(options: { node?: HTMLElement | null; flags: Flags }): ElmApp };
+};
 ```

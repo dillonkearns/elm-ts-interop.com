@@ -1,1 +1,5 @@
-export default function(elmAppReady) {}
+import { register } from "/ts-editor.js";
+
+export default function (elmAppReady) {
+  register();
+}
